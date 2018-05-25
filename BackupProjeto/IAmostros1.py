@@ -64,6 +64,28 @@ def discretiza(colunas):
 	#Retornamos o dataframe convertido
 	return pd.DataFrame.from_dict(novasColunas) #Construir um dataframe a partir de um dicionario
 
+def fazOutlier(df):
+	#Lembrando que ao recebermos um dicionário no for, ele vai printando suas palavras chave, então basta que
+	#a cada palavra chave no for, nós percorramos toda a linha
+	new_df = pd.DataFrame(df)
+	for instancia in new_df:
+		i = 0
+		#Vamos percorrer essa lista
+		aux = new_df[instancia].tolist() #Nos temos Series em nossas palavras chaves, elas são como listas, só que com outros metodos
+		for elemento in aux:
+			if(elemento == "-"):
+				del(aux[i])
+				aux.insert(i, 10000)
+			i+=1
+			new_df[instancia] = aux
+		#if(instancia == "Int"): #Ele é uma colomn que tem '-' e podemos visualizar se está fazendo certo
+	return new_df
+
+def badMonsters(df):
+	df.set_index('Name', inplace = True)
+	print(df.head())
+
+
 #----------------------------main----------------------------------------------------------------------------------
 #Primeira coisa que fazemos é carregar o nosso dataset em um objeto da classe DataFrame
 #Ele basicamente carrega o arquivo e coloca numa variável
@@ -84,18 +106,21 @@ dados = dados.drop(['ID', 'Sub-Type', 'Attack', 'Full Attack', 'Special Attacks'
 
 dados_nreais =  dados.drop(['Type', 'Syze', 'Dice Type', 'Speed', 'Armor Class',  'Space|Reach', 'Enviroments', 'Treasure', 'Alignment', 'LvL Adjustment'], axis = 1)
 
-print("Dados reais:", dados_nreais, sep = "\n")
+#print("Dados reais:", dados_nreais, sep = "\n")
 
 dados_naonumericos = dados[['Type', 'Syze', 'Dice Type', 'Speed', 'Armor Class',  'Space|Reach', 'Enviroments', 'Treasure', 'Alignment', 'LvL Adjustment']]
 
 dados_ndiscretos = discretiza(dados_naonumericos)
 
-print("\n" * 2, "Dados discretos", dados_ndiscretos, sep = "\n")
+#print("\n" * 5, "Dados discretos", dados_ndiscretos, sep = "\n")
 
 #No caso axis é a coordanada que vamos ir concatenando, como nesse caso é no 'y', vamos colocar 1
 #sorted = false, significa que é para ele colocar na sequência em que isso foi concatenado
-dados_processados = pd.concat([dados_nreais, dados_ndiscretos], axis=1, sort=False)
+dados_normalizados = pd.concat([dados_nreais, dados_ndiscretos], axis=1, sort=False)
 
+dados_processados = fazOutlier(dados_normalizados)
+
+badMonsters(dados_processados)
 
 '''
 x = dados_processados.drop(['LvL Adjustment'], axis = 1)
