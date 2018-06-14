@@ -28,4 +28,15 @@ concat = pd.concat([df1, df2])
 
 concat = pd.concat([df1,df2,df3])
 
-print(concat)
+#print(concat)
+
+#Veja, é adicionada uma nova coluna que nenhum dos outros dataframes tem, o df3 é colocado embaixo na tabela e
+#a coluna que ele n tem, também é adicionada resultando em outros NaN, basicamente a concatenacao só adiciona embaixo
+
+#O método append faz a mesma coisa que o método concat, sem tirar nem por pd.append(dataframes)
+#Podemos criar uma linha separada e depois colocarmos em nosso DataFrame, mas o pandas não é exatamente o melhor do mundo em
+#fazer entrada de dados gradual em nossos dataframe, ele é melhor apenas em manipula-los, mas podemos fazer alguams coisinhas anyway
+
+s = pd.Series([80,2,50], index=['HPI','Int_rate','US_GDP_Thousands']) #Criamos uma linha, com esses nomes no dicionario
+df4 = df1.append(s, ignore_index=True) #Como n add uma coluna de index, vamos ignorar todos eles para fazer nosso append
+print(df4)

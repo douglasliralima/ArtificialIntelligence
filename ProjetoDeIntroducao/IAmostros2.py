@@ -17,7 +17,7 @@ from sklearn.decomposition import PCA
 from sklearn.metrics import r2_score
 from sklearn.svm import SVC
 
-
+guarda_string = {}
 
 #A funcao pega todas as colunas que foram passadas no dataframe e discretiza os seus valores
 #retornando um dataframe com os valores discretizados
@@ -25,12 +25,13 @@ def discretiza(colunas):
 	#Lembrando que ao recebermos um dicionário no for, ele vai printando suas palavras chave, então basta que
 	#a cada palavra chave no for, nós percorramos toda a linha
 	novasColunas = {}
+
 	for instancia in colunas:
 		palavras = []  #Representará cada um dos nossos rótulos
 		valores = {}   #Representará cada um dos valores númericos referentes a esses rótulos
 		valor = 0      #O número subirá a partir disso
 		rotulados = [] #Representacao de cada elemento classificado, com um rótulo numérico
-
+		strings = {}
 		for elemento in colunas[instancia]:
 			'''
 			Vou ver em uma lista se eu já não me deparei com esse
@@ -55,12 +56,15 @@ def discretiza(colunas):
 			if(existe == False):
 				#print("Elemento:", elemento, "Valor:", valor)
 				valores[elemento] = valor
+				strings[valor] = elemento
 				valor +=1
 			#Para cada instancia nessa coluna vamos pegar o valor correspondente do elemento, 
 			#em nosso dicionario de valores
 			rotulados.append(valores[elemento])
 		#Agora seguindo o formato do pandas, eu deixo a palavra chave daquela coluna, para a lista de rotulados
+
 		novasColunas[instancia] = rotulados
+		guarda_string[instancia] = strings
 	#Retornamos o dataframe convertido
 	return pd.DataFrame.from_dict(novasColunas) #Construir um dataframe a partir de um dicionario
 
@@ -84,6 +88,7 @@ def atributoNeutro(df):
 				aux.insert(i, '10000')
 			i+=1
 			new_df[instancia] = aux
+
 	#print(new_df['LvL Adjustment'].tail())
 	return new_df
 
@@ -121,19 +126,27 @@ def preprocessMonster(monstros):
 	return dados_processados
 
 
-#----------------------------main----------------------------------------------------------------------------------
+#--------------------------------------------main-------------------------------------------------------------------
 #Primeira coisa que fazemos é carregar o nosso dataset em um objeto da classe DataFrame
 #Ele basicamente carrega o arquivo e coloca numa variável
 dados = pd.read_csv('Monstros.csv')
 
 dados = preprocessMonster(dados)
-
-#print(dados)
-
+print(guarda_string.values())
+print(dados.head())
 
 x = dados.drop(['LvL Adjustment'], axis = 1)
 y = dados['LvL Adjustment']
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, random_state = 2)
+
+'''
+Nós mandariamos para a IA:
+Type, Syze, Enviroment, Challenge Rating, Aligment
+A IA precisa determinar:
+Hit-Dice,
+Determinar Programacionalmente:
+Dice Type, 
+'''
 
 for i in range(5):
 	print("teste nº", i, sep = "")
@@ -144,7 +157,6 @@ for i in range(5):
 	print("Acuracia do KNN:", acuracia)
 
 	#------------------
-
 	svm = SVC()
 	svm.fit(x_train, y_train)
 
