@@ -16,7 +16,8 @@ while True:
 	conexao, endereco = sockobj.accept()
 	print("Server conectado com", endereco)
 
-	entrada = conexao.recv(1024)
+	entrada = conexao.recv(100000)
+	print(entrada)
 
 	count1 = 0
 	valor = ''
@@ -31,6 +32,8 @@ while True:
 				count2+=1
 			break
 		count1+=1
-
-	conexao.send(data.encode())
+	print(valor)
+	#conexao.send(valor.encode())
 	count = 0
+
+	conexao.close()

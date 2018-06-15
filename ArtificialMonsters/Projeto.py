@@ -24,154 +24,7 @@ from sklearn.linear_model import RidgeCV
 from sklearn.ensemble import RandomForestRegressor
 from collections import OrderedDict
 from sklearn.multioutput import MultiOutputClassifier
-import collections
-
-'''
-Fazer um dicionário de dicionários, onde cada coluna seja referenciavel pelo atributo
-cada elemento desse dicionario sera a relação do numero naquele atributo e o seu string correspondente
-vamos chamar isso de bigDic
-'''
-
-#A funcao pega todas as colunas que foram passadas no dataframe e discretiza os seus valores
-#retornando um dataframe com os valores discretizadostransformacoes = {}
-traducaoUsuario = {} #Grande dicionario de dicionarios que guarda cada uma de nossas strings e sua correlações númericas em um dataframe ficticio
-traducaoPrograma = {}
-
-def discretiza(colunas):
-	#Lembrando que ao recebermos um dicionário no for, ele vai printando suas palavras chave, então basta que
-	#a cada palavra chave no for, nós percorramos toda a linha
-	novasColunas = {}
-	global traducaoUsuario
-	global traducaoPrograma
-
-	for instancia in colunas:
-		palavras = []  #Representará cada um dos nossos rótulos
-		valores = {}   #Representará cada um dos valores númericos referentes a esses rótulos
-		valor = 0      #O número subirá a partir disso
-		rotulados = [] #Representacao de cada elemento classificado, com um rótulo numérico
-
-		for elemento in colunas[instancia]:
-			'''
-			Vou ver em uma lista se eu já não me deparei com esse
-			mesmo elemento anteriomente nessa coluna
-			'''
-			existe = False
-
-			for x in range(len(palavras)):
-				if(len(palavras) == 0):
-					#Se não existia nenhum elemento anteriormente, obviamente não havia nada antes para estar igual
-					existe = True
-					break
-				#Se eu encontrar um único elemento igual, eu retiro ela da minha lista
-				if(palavras[x] == elemento):
-					existe = True
-					palavras.remove(elemento)
-					#print("Dropei", elemento, end = "")
-					break
-			palavras.append(elemento)
-
-			#Bom, se o elemento não existir na minha lista, eu o adiciono no meu dicionário de valores
-			if(existe == False):
-				#print("Elemento:", elemento, "Valor:", valor)
-				valores[elemento] = valor
-				valor +=1
-			#Para cada instancia nessa coluna vamos pegar o valor correspondente do elemento, 
-			#em nosso dicionario de valores
-			rotulados.append(valores[elemento])
-
-		#Guardamos a referência do que foi traduzido para ser usado em nossa entrada
-		traducaoUsuario[instancia] = valores
-		#Em nossa saída, a única coisa que precisamos guardar a tradução é para dado número chegar na string de Armor Class
-		if(instancia == 'Armor Class'):
-			traducaoPrograma = {y:x for x,y in valores.items()} #Metodo para trocar os chaves pelos valores de um dicionario
-			
-		#Agora seguindo o formato do pandas, eu deixo a palavra chave daquela coluna, para a lista de rotulados
-		novasColunas[instancia] = rotulados
-	#Retornamos o dataframe convertido
-	#print(traducaoPrograma.head())
-	return pd.DataFrame.from_dict(novasColunas) #Construir um dataframe a partir de um dicionario
-
-
-
-def traduzUsuario(monstro):
-	monstro_programa = {}
-	global traducaoUsuario
-	#print(traducaoUsuario)
-	for atributo in monstro:
-		for elemento in monstro[atributo]:
-			monstro_programa[atributo] = traducaoUsuario[atributo][elemento]
-
-	aux = pd.DataFrame(monstro_programa, index=[0])
-	return pd.DataFrame.from_dict(aux)
-
-
-def protocoloSaida(y, entrada):
-	monstro_programa = {}
-	count = 0
-	for atributo in y:
-		if(atributo == 'Armor Class'):
-			for elemento_saida in traducaoPrograma:
-				monstro_programa[atributo] = traducaoPrograma[entrada[count]]
-		else:
-			monstro_programa[atributo] = entrada[count]
-		count+=1
-	return monstro_programa
-
-#Vamos tratar os casos de um atributo neutro, que no caso é retratado no dataset como o '-'
-def atributoNeutro(df):
-	#Lembrando que ao recebermos um dicionário no for, ele vai printando suas palavras chave, então basta que
-	#a cada palavra chave no for, nós percorramos toda a linha
-	new_df = pd.DataFrame(df)
-	#print(new_df['LvL Adjustment'].tail())
-	for instancia in new_df:
-		i = 0
-		#Vamos percorrer essa lista
-		aux = new_df[instancia].tolist() #Nos temos Series em nossas palavras chaves, elas são como listas, só que com outros metodos
-		for elemento in aux:
-			if(elemento == "-"):
-				del(aux[i])
-				#Como todos os elementos são strings que serão convertidas para inteiros, colocamos ele como string tbm
-				aux.insert(i, '-1')
-			i+=1
-			new_df[instancia] = aux
-	#print(new_df['LvL Adjustment'].tail())
-	return new_df
-
-
-
-def badMonsters(df):
-	#print(df)
-	df.drop(205, inplace = True)
-	return pd.DataFrame(df)
-
-
-
-
-def preprocessMonster(monstros):
-	monstros = monstros.drop(['Name', 'ID', 'Sub-Type', 'Attack', 'Full Attack', 'Special Attacks',
-	 'Special Qualities', 'Skills', 'Feats', 'Organization', 'Advancement', 'Dice Type', 'Life Bonus',
-	  'Dex', 'Initiative', 'Base Attack', 'Speed', 'Grapple', 'Space|Reach', 'Treasure'],
-	axis = 1)#Essas colunas eram todas inúteis para a nossa discretização
-	
-
-	dados_nreais =  monstros.drop(['Type', 'Syze', 'Armor Class', 'Enviroments', 'Alignment'], axis = 1)
-	#print(dados_nreais.head())
-	dados_naonumericos = monstros[['Type', 'Syze', 'Armor Class', 'Enviroments', 'Alignment']]
-	#print(dados_naonumericos.head())
-
-	dados_ndiscretos = discretiza(dados_naonumericos)
-	print(dados_ndiscretos.head())
-
-	#No caso axis é a coordanada que vamos ir concatenando, se fosse linhas era 0, mas como é colunas ele é 1
-	#sorted = false, significa que é para ele colocar na sequência em que isso foi concatenado
-	dados_normalizados = pd.concat([dados_nreais, dados_ndiscretos], axis=1)
-	#print(dados_normalizados.head())
-
-	neutro_processado = atributoNeutro(dados_normalizados)
-
-	dados_processados = badMonsters(neutro_processado)
-	#print(dados_processados)
-	return dados_processados
+import Process
 
 
 
@@ -181,7 +34,7 @@ def preprocessMonster(monstros):
 dados = pd.read_csv('Monstros.csv')
 
 
-dados = preprocessMonster(dados)
+dados = Process.preprocessMonster(dados)
 
 for i in dados.keys().values:
 	print(i)
@@ -253,7 +106,7 @@ aux = pd.DataFrame(new_data, columns=new_data.keys(), index = [0])
 new_data_naonumeros = aux[['Type', 'Syze', 'Enviroments', 'Alignment']]
 new_data_numeros = aux.drop(['Type', 'Syze', 'Enviroments', 'Alignment'], axis = 1 )
 
-new_data_naonumeros = traduzUsuario(new_data_naonumeros)
+new_data_naonumeros = Process.traduzUsuario(new_data_naonumeros)
 #print(new_data_naonumeros, new_data_numeros, sep = '\n')
 
 aux = pd.concat([new_data_numeros, new_data_naonumeros], axis=1)
@@ -286,13 +139,13 @@ numeros = predict4[0, :]
 resultado4 = [int(x) for x in numeros]
 
 print("\n" * 2, "Resultado 1:", resultado1, sep = "\n")
-print(protocoloSaida(y_train, resultado1))
+print(Process.protocoloSaida(y_train, resultado1))
 print("\n" * 2, "Resultado 2:", resultado2, sep = "\n")
-print(protocoloSaida(y_train, resultado2))
+print(Process.protocoloSaida(y_train, resultado2))
 print("\n" * 2, "Resultado 3:", resultado3, sep = "\n")
-print(protocoloSaida(y_train, resultado3))
+print(Process.protocoloSaida(y_train, resultado3))
 print("\n" * 2, "Resultado 4:", resultado4, sep = "\n")
-print(protocoloSaida(y_train, resultado4))
+print(Process.protocoloSaida(y_train, resultado4))
 
 
 
