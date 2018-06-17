@@ -3,18 +3,19 @@ import numpy as np
 
 
 class Process:
-'''
-Fazer um dicionário de dicionários, onde cada coluna seja referenciavel pelo atributo
-cada elemento desse dicionario sera a relação do numero naquele atributo e o seu string correspondente
-vamos chamar isso de bigDic
-'''
 
-#A funcao pega todas as colunas que foram passadas no dataframe e discretiza os seus valores
-#retornando um dataframe com os valores discretizadostransformacoes = {}
-__traducaoUsuario = {} #Grande dicionario de dicionarios que guarda cada uma de nossas strings e sua correlações númericas em um dataframe ficticio
-__traducaoPrograma = {}
+	'''
+	Fazer um dicionário de dicionários, onde cada coluna seja referenciavel pelo atributo
+	cada elemento desse dicionario sera a relação do numero naquele atributo e o seu string correspondente
+	vamos chamar isso de bigDic
+	'''
 
-	def __discretiza(colunas):
+	#A funcao pega todas as colunas que foram passadas no dataframe e discretiza os seus valores
+	#retornando um dataframe com os valores discretizadostransformacoes = {}
+	__traducaoUsuario = {} #Grande dicionario de dicionarios que guarda cada uma de nossas strings e sua correlações númericas em um dataframe ficticio
+	__traducaoPrograma = {}
+	
+	def discretiza(colunas):
 		#Lembrando que ao recebermos um dicionário no for, ele vai printando suas palavras chave, então basta que
 		#a cada palavra chave no for, nós percorramos toda a linha
 		novasColunas = {}
@@ -69,7 +70,7 @@ __traducaoPrograma = {}
 
 
 	#Vamos tratar os casos de um atributo neutro, que no caso é retratado no dataset como o '-'
-	def __atributoNeutro(df):
+	def atributoNeutro(df):
 		#Lembrando que ao recebermos um dicionário no for, ele vai printando suas palavras chave, então basta que
 		#a cada palavra chave no for, nós percorramos toda a linha
 		new_df = pd.DataFrame(df)
@@ -88,14 +89,10 @@ __traducaoPrograma = {}
 		#print(new_df['LvL Adjustment'].tail())
 		return new_df
 
-
-
-	def __badMonsters(df):
+	def badMonsters(df):
 		#print(df)
 		df.drop(205, inplace = True)
 		return pd.DataFrame(df)
-
-
 
 	def preprocessMonster(monstros):
 		monstros = monstros.drop(['Name', 'ID', 'Sub-Type', 'Attack', 'Full Attack', 'Special Attacks',
@@ -109,7 +106,8 @@ __traducaoPrograma = {}
 		dados_naonumericos = monstros[['Type', 'Syze', 'Armor Class', 'Enviroments', 'Alignment']]
 		#print(dados_naonumericos.head())
 
-		dados_ndiscretos = __discretiza(dados_naonumericos)
+		dados_ndiscretos = Process.discretiza(dados_naonumericos)
+		
 		print(dados_ndiscretos.head())
 
 		#No caso axis é a coordanada que vamos ir concatenando, se fosse linhas era 0, mas como é colunas ele é 1
@@ -117,9 +115,9 @@ __traducaoPrograma = {}
 		dados_normalizados = pd.concat([dados_nreais, dados_ndiscretos], axis=1)
 		#print(dados_normalizados.head())
 
-		neutro_processado = __atributoNeutro(dados_normalizados)
+		neutro_processado =	Process.atributoNeutro(dados_normalizados)
 
-		dados_processados = __badMonsters(neutro_processado)
+		dados_processados = Process.badMonsters(neutro_processado)
 		#print(dados_processados)
 		return dados_processados
 

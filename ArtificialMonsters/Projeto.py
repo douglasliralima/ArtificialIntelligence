@@ -24,11 +24,10 @@ from sklearn.linear_model import RidgeCV
 from sklearn.ensemble import RandomForestRegressor
 from collections import OrderedDict
 from sklearn.multioutput import MultiOutputClassifier
-import Process
+from Process import Process
 
 
-
-    #----------------------------main----------------------------------------------------------------------------------
+#-------------------
 #Primeira coisa que fazemos é carregar o nosso dataset em um objeto da classe DataFrame
 #Ele basicamente carrega o arquivo e coloca numa variável
 dados = pd.read_csv('Monstros.csv')
@@ -138,14 +137,104 @@ resultado3 = [int(x) for x in numeros]
 numeros = predict4[0, :]
 resultado4 = [int(x) for x in numeros]
 
+print(new_data)
 print("\n" * 2, "Resultado 1:", resultado1, sep = "\n")
 print(Process.protocoloSaida(y_train, resultado1))
-print("\n" * 2, "Resultado 2:", resultado2, sep = "\n")
-print(Process.protocoloSaida(y_train, resultado2))
-print("\n" * 2, "Resultado 3:", resultado3, sep = "\n")
-print(Process.protocoloSaida(y_train, resultado3))
-print("\n" * 2, "Resultado 4:", resultado4, sep = "\n")
-print(Process.protocoloSaida(y_train, resultado4))
+#print("\n" * 2, "Resultado 2:", resultado2, sep = "\n")
+#print(Process.protocoloSaida(y_train, resultado2))
+#print("\n" * 2, "Resultado 3:", resultado3, sep = "\n")
+#print(Process.protocoloSaida(y_train, resultado3))
+#print("\n" * 2, "Resultado 4:", resultado4, sep = "\n")
+#print(Process.protocoloSaida(y_train, resultado4))
+
+artificialMonster = Process.protocoloSaida(y_train, resultado1)
+
+#==============================#=#========================================================================#=#
+# GERAÇÂO DOS ATRIBUTOS SEM IA #=#========================================================================#=#
+'''
+' Parte construida por Drayton Corrêa Filho (Drayton80)
+'''
+# LIFE BONUS and BASE AINITIATIVE #--------------------------------------------------------#
+#lifeBonus = modificadorCon*artificialMonster['Hit dice']
+
+#initiative = artificialMonster['Des']
+#---------------------------------#--------------------------------------------------------#
+
+# DICE TYPE and BASE ATTACK #--------------------------------------------------------------#
+# Aqui é observado o Tipo da criatura para poder checar seu tipo de dado e BBA à partir
+# da tabela 4-1: Creature Improvement by Type do Monster Manual 
+if(new_data['Type'] == "Aberration" or new_data['Type'] == "Animal" or
+   new_data['Type'] == "Elemental" or new_data['Type'] == "Giant" or
+   new_data['Type'] == "Humanoid" or new_data['Type'] == "Plant" or
+   new_data['Type'] == "Vermin"):
+        diceType = "d8"
+        baseAttack = int(artificialMonster['Hit dice']*3/4)
+
+elif(new_data['Type'] == "Construct" or new_data['Type'] == "Ooze"):
+        diceType = "d10"
+        baseAttack = int(artificialMonster['Hit dice']*3/4)
+
+elif(new_data['Type'] == "Dragon"):
+        diceType = "d12"
+        baseAttack = artificialMonster['Hit dice']
+
+elif(new_data['Type'] == "Fey"):
+        diceType = "d6"
+        baseAttack = int(artificialMonster['Hit dice']*1/2)
+
+elif(new_data['Type'] == "Magical Beast"):
+        diceType = "d10"
+        baseAttack = artificialMonster['Hit dice']
+
+elif(new_data['Type'] == "Monstrous Humanoid" or new_data['Type'] == "Outsider"):
+        diceType = "d8"
+        baseAttack = artificialMonster['Hit dice']
+
+elif(new_data['Type'] == "Undead"):
+        diceType = "d12"
+        baseAttack = int(artificialMonster['Hit dice']*1/2)
+#---------------------------#--------------------------------------------------------------#
+
+# GRAPPLE #--------------------------------------------------------------------------------#
+if(new_data['Syze'] == "Colossal"):
+        specialSizeModifier = 16
+
+elif(new_data['Syze'] == "Gargantuan"):
+        specialSizeModifier = 12
+
+elif(new_data['Syze'] == "Huge"):
+        specialSizeModifier = 8
+
+elif(new_data['Syze'] == "Large"):
+        specialSizeModifier = 4
+
+elif(new_data['Syze'] == "Medium"):
+        specialSizeModifier = 0
+
+elif(new_data['Syze'] == "Small"):
+        specialSizeModifier = -4
+
+elif(new_data['Syze'] == "Tiny"):
+        specialSizeModifier = -8
+
+elif(new_data['Syze'] == "Diminutive"):
+        specialSizeModifier = -12
+
+elif(new_data['Syze'] == "Fine"):
+        specialSizeModifier = -16
+
+
+grapple = baseAttack + specialSizeModifier
+'''TO DO Modificador +''' 
+#---------#--------------------------------------------------------------------------------#
+
+#==============================#=#========================================================================#=#
+
+#print("Life Bônus: ", lifeBonus)
+#print("Initiative: ", initiative)
+print("Dice Type: ", diceType)
+print("Base Attack: ", baseAttack)
+print("Grapple: ", grapple)
 
 
 
