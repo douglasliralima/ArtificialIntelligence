@@ -58,36 +58,36 @@ class Comunicacao:
 						#print("ca normal", ca_normal, ca_touch, ca_surprise)
 
 						if(self.monsterIn['Syze'][count1] == "Colossal"):
-		                        armorSizeModifier = -4
+							armorSizeModifier = -4
 
-		                elif(self.monsterIn['Syze'][count1] == "Gargantuan"):
-		                        armorSizeModifier = -3
+						elif(self.monsterIn['Syze'][count1] == "Gargantuan"):
+							armorSizeModifier = -3
 
-		                elif(self.monsterIn['Syze'][count1] == "Huge"):
-		                        armorSizeModifier = -2
+						elif(self.monsterIn['Syze'][count1] == "Huge"):
+							armorSizeModifier = -2
 
-		                elif(self.monsterIn['Syze'][count1] == "Large"):
-		                        armorSizeModifier = -1
+						elif(self.monsterIn['Syze'][count1] == "Large"):
+							armorSizeModifier = -1
 
-		                elif(self.monsterIn['Syze'][count1] == "Medium"):
-		                        armorSizeModifier = 0
+						elif(self.monsterIn['Syze'][count1] == "Medium"):
+							armorSizeModifier = 0
 
-		                elif(self.monsterIn['Syze'][count1] == "Small"):
-		                        armorSizeModifier = 1
+						elif(self.monsterIn['Syze'][count1] == "Small"):
+							armorSizeModifier = 1
 
-		                elif(self.monsterIn['Syze'][count1] == "Tiny"):
-		                        armorSizeModifier = 2
+						elif(self.monsterIn['Syze'][count1] == "Tiny"):
+							armorSizeModifier = 2
 
-		                elif(self.monsterIn['Syze'][count1] == "Diminutive"):
-		                        armorSizeModifier = 3
+						elif(self.monsterIn['Syze'][count1] == "Diminutive"):
+							armorSizeModifier = 3
 
-		                elif(self.monsterIn['Syze'][count1] == "Fine"):
-		                        armorSizeModifier = 4
+						elif(self.monsterIn['Syze'][count1] == "Fine"):
+							armorSizeModifier = 4
 
-                        mod_dex = ca_touch - armorSizeModifier - 10
-		                dex = (mod_dex * 2) + 10
+						mod_dex = ca_touch - armorSizeModifier - 10
+						dex = (mod_dex * 2) + 10
 
-		                natural_armor = ca_surprise - armorSizeModifier - 10
+						natural_armor = ca_surprise - armorSizeModifier - 10
 
 						#valor += str(ca_normal) + "," + str(ca_touch) + "," + str(ca_surprise) + ","
 						count2+=1
