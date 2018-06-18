@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 import math
+import random
+
 from sklearn import preprocessing, svm
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
@@ -157,30 +159,37 @@ class Projeto:
                    self.monsterIn['Type'] == "Humanoid" or self.monsterIn['Type'] == "Plant" or
                    self.monsterIn['Type'] == "Vermin"):
                         diceType = "d8"
+                        dice = 8
                         baseAttack = int(artificialMonster['Hit dice']*3/4)
 
                 elif(self.monsterIn['Type'] == "Construct" or self.monsterIn['Type'] == "Ooze"):
                         diceType = "d10"
+                        dice = 10
                         baseAttack = int(artificialMonster['Hit dice']*3/4)
 
                 elif(self.monsterIn['Type'] == "Dragon"):
                         diceType = "d12"
+                        dice = 12
                         baseAttack = artificialMonster['Hit dice']
 
                 elif(self.monsterIn['Type'] == "Fey"):
                         diceType = "d6"
+                        dice = 6
                         baseAttack = int(artificialMonster['Hit dice']*1/2)
 
                 elif(self.monsterIn['Type'] == "Magical Beast"):
                         diceType = "d10"
+                        dice = 10
                         baseAttack = artificialMonster['Hit dice']
 
                 elif(self.monsterIn['Type'] == "Monstrous Humanoid" or self.monsterIn['Type'] == "Outsider"):
                         diceType = "d8"
+                        dice = 8
                         baseAttack = artificialMonster['Hit dice']
 
                 elif(self.monsterIn['Type'] == "Undead"):
                         diceType = "d12"
+                        dice = 12
                         baseAttack = int(artificialMonster['Hit dice']*1/2)
                 #---------------------------#--------------------------------------------------------------#
 
@@ -216,6 +225,22 @@ class Projeto:
                 grapple = baseAttack + int((artificialMonster['Str']-10)/2) + specialSizeModifier
                 #---------#--------------------------------------------------------------------------------#
 
+                # HIT POINTS #-----------------------------------------------------------------------------#
+                hitPoints = 0
+
+                i = 1
+
+                # Faz um while que cálcula cada rolagem de dados para vida:
+                while (i <= artificialMonster['Hit dice']):
+                    # Simula à rolagem de um dado fazendo um random integer que vai
+                    # de 1 até o número máximo do dado especificado pela variável dice
+                    hitPoints += random.randint(1, dice)
+
+                    i += 1
+
+                hitPoints += lifeBonus
+                #------------#-----------------------------------------------------------------------------#
+
                 #=#==============================#=#========================================================================#=#
                 #=#=============================#=#========================================================================#=#
 
@@ -226,8 +251,8 @@ class Projeto:
                 #print("Grapple: ", grapple)
 
 
-                monsterToClient = (self.monsterIn['Type'] + "," + self.monsterIn['Syze'] + "," + str(artificialMonster['Hit dice']) + "," +
-                str(diceType) + "," + str(lifeBonus) + "," + str(baseAttack) + "," + str(grapple) + "," +
+                monsterToClient = (self.monsterIn['Type'] + "," + self.monsterIn['Syze'] + "," + str(hitPoints) + "," +
+                str(baseAttack) + "," + str(grapple) + "," +
                 str(artificialMonster['Fortitude']) + "," + str(artificialMonster['Reflexes']) + "," + 
                 str(artificialMonster['Will']) + "," + str(artificialMonster['Str']) + "," + 
                 str(artificialMonster['Con']) + "," +
@@ -249,3 +274,4 @@ class Projeto:
                 '''
                 
                 return monsterToClient
+
