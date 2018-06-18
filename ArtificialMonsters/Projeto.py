@@ -149,8 +149,9 @@ print(Process.protocoloSaida(y_train, resultado1))
 
 artificialMonster = Process.protocoloSaida(y_train, resultado1)
 
-#==============================#=#========================================================================#=#
-# GERAÇÂO DOS ATRIBUTOS SEM IA #=#========================================================================#=#
+#=#=============================#=#========================================================================#=#
+#=# GERAÇÂO DOS ATRIBUTOS SEM IA #=#========================================================================#=#
+#=#=============================#=#========================================================================#=#
 '''
 ' Parte construida por Drayton Corrêa Filho (Drayton80)
 '''
@@ -228,7 +229,8 @@ grapple = baseAttack + specialSizeModifier
 '''TO DO Modificador +''' 
 #---------#--------------------------------------------------------------------------------#
 
-#==============================#=#========================================================================#=#
+#=#==============================#=#========================================================================#=#
+#=#=============================#=#========================================================================#=#
 
 #print("Life Bônus: ", lifeBonus)
 #print("Initiative: ", initiative)
@@ -236,5 +238,32 @@ print("Dice Type: ", diceType)
 print("Base Attack: ", baseAttack)
 print("Grapple: ", grapple)
 
+new_data = OrderedDict([
+        ('Type', 'Magical Beast'),
+        ('Syze', 'Large'),
+        ('Enviroments', 'Desert Warn'),
+        ('Alignment', 'Chaotic Good'),
+        ('LvL Adjustment', '5'),
+        ('Challenge Rating', '9')
+        ])
 
+monstro_cliente = (new_data['Type'] + "," + new_data['Syze'] + "," + str(artificialMonster['Hit dice']) + "," +
+str(diceType) + "," + str(baseAttack) + "," + str(grapple) + "," +
+str(artificialMonster['Fortitude']) + "," + str(artificialMonster['Reflexes']) + "," + 
+str(artificialMonster['Will']) + "," + str(artificialMonster['Str']) + "," + str(artificialMonster['Con']) + "," +
+str(artificialMonster['Int']) + "," + str(artificialMonster['Wis']) + "," +
+str(artificialMonster['Cha']) + "," + new_data['Enviroments'] + "," + 
+str(new_data['Challenge Rating']) + "," + new_data['Alignment'])
 
+print(monstro_cliente)
+
+'''
+monstro_cliente = new_data['Type'] + "," + new_data['Syze'] + "," + str(artificialMonster['Hit dice']) + "," +
+str(diceType) + "," + str(lifeBonus) + "," + str(initiative) + "," + str(baseAttack) + "," + str(grapple) + "," +
+str(artificialMonster['Fortitude']) + "," + str(artificialMonster['Reflexes']) + "," + 
+str(artificialMonster['Will']) + "," + str(artificialMonster['Str']) + "," + 
+str(artificialMonster['Dex']) + "," + str(artificialMonster['Con']) + "," +
+str(artificialMonster['Int']) + "," + str(artificialMonster['Wis']) + "," +
+str(artificialMonster['Cha']) + "," + str(new_data['Enviroments']) + "," + 
+str(new_data['Challenge Rating']) + "," + new_data['Alignment']
+'''
