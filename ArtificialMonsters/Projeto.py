@@ -148,7 +148,6 @@ class Projeto:
                 # LIFE BONUS and BASE AINITIATIVE #--------------------------------------------------------#
                 lifeBonus = int((artificialMonster['Con']-10)/2)*artificialMonster['Hit dice']
 
-                #initiative = int((artificialMonster['Dex']-10)/2)
                 #---------------------------------#--------------------------------------------------------#
 
                 # DICE TYPE and BASE ATTACK #--------------------------------------------------------------#
@@ -196,40 +195,77 @@ class Projeto:
                 # GRAPPLE #--------------------------------------------------------------------------------#
                 if(self.monsterIn['Syze'] == "Colossal"):
                         specialSizeModifier = 16
+                        armorSizeModifier = -4
 
                 elif(self.monsterIn['Syze'] == "Gargantuan"):
                         specialSizeModifier = 12
+                        armorSizeModifier = -3
 
                 elif(self.monsterIn['Syze'] == "Huge"):
                         specialSizeModifier = 8
+                        armorSizeModifier = -2
 
                 elif(self.monsterIn['Syze'] == "Large"):
                         specialSizeModifier = 4
+                        armorSizeModifier = -1
 
                 elif(self.monsterIn['Syze'] == "Medium"):
                         specialSizeModifier = 0
+                        armorSizeModifier = 0
 
                 elif(self.monsterIn['Syze'] == "Small"):
                         specialSizeModifier = -4
+                        armorSizeModifier = 1
 
                 elif(self.monsterIn['Syze'] == "Tiny"):
                         specialSizeModifier = -8
+                        armorSizeModifier = 2
 
                 elif(self.monsterIn['Syze'] == "Diminutive"):
                         specialSizeModifier = -12
+                        armorSizeModifier = 3
 
                 elif(self.monsterIn['Syze'] == "Fine"):
                         specialSizeModifier = -16
+                        armorSizeModifier = 4
 
 
                 grapple = baseAttack + int((artificialMonster['Str']-10)/2) + specialSizeModifier
+
+                ArmorGeral = artificialMonster['Armor Class'] + '|'
+                count = 0
+                valor = ""
+                ca_normal = 0
+                ca_touch = 0
+                ca_surprise = 0
+                for letra in ArmorGeral:
+                    if(letra == '|'):
+                        if(count == 0):
+                            ca_normal = int(valor)
+                        elif(count == 1):
+                            ca_touch = int(valor)
+                        elif(count == 2):
+                            ca_surprise = int(valor)
+                        valor = ""
+                        count +=1
+                        continue
+                    valor += letra
+                print("Normal:", ca_normal, "Touch:", ca_touch, "Surprise:", ca_surprise)
+                mod_dex = ca_touch - 10 - armorSizeModifier
+                dex = (mod_dex * 2) + 10
+
+
+
+                initiative = mod_dex
+
+                print("Armadura Geral", ArmorGeral, "Destreza:", dex, 'Iniciativa', initiative)
                 #---------#--------------------------------------------------------------------------------#
 
                 # HIT POINTS #-----------------------------------------------------------------------------#
                 hitPoints = 0
 
                 i = 1
-
+                print("Hit Dice:", artificialMonster['Hit dice'])
                 # Faz um while que cálcula cada rolagem de dados para vida:
                 while (i <= artificialMonster['Hit dice']):
                     # Simula à rolagem de um dado fazendo um random integer que vai
@@ -237,8 +273,10 @@ class Projeto:
                     hitPoints += random.randint(1, dice)
 
                     i += 1
-
+                print("Hit Points (antes do Life Bonus):", hitPoints)
+                print("Life Bonus:", lifeBonus)
                 hitPoints += lifeBonus
+                print("Hit Points:", hitPoints)
                 #------------#-----------------------------------------------------------------------------#
 
                 #=#==============================#=#========================================================================#=#
@@ -249,18 +287,37 @@ class Projeto:
                 #print("Dice Type: ", diceType)
                 #print("Base Attack: ", baseAttack)
                 #print("Grapple: ", grapple)
+                '''
+                monsterToClient = {"Hit Dice:" : artificialMonster['Hit dice'], 'Type' : self.monsterIn['Type'],
+                'Syze' : self.monsterIn['Syze'],'Fortitude' : str(artificialMonster['Fortitude']), 
+                'Reflexes' : str(artificialMonster['Reflexes']),'Will': str(artificialMonster['Will']),
+                'Str' : str(artificialMonster['Str']),'Con' : str(artificialMonster['Con']), 
+                'Int' : str(artificialMonster['Int']), 'Wis' : str(artificialMonster['Wis']), 
+                'Cha' : str(artificialMonster['Cha'])}
 
+                print(artificialMonster['Armor Class'])
+
+                print(monsterToClient)
+                '''
+
+
+
+                #Tipo, tamanho, hitpoints, initiative, Armor Class, bba, grapple, Fortitude, Reflexos, vontade, força, Destreza, constituicao, inteligencia, sabedoria
+                #carisma, enviroments, challenge rating, alignment
+                print("Armadura Geral", artificialMonster['Armor Class'], "Destreza:", dex, 'Iniciativa', initiative)
 
                 monsterToClient = (self.monsterIn['Type'] + "," + self.monsterIn['Syze'] + "," + str(hitPoints) + "," +
+                str(initiative) + "," + artificialMonster['Armor Class'] + "," +
                 str(baseAttack) + "," + str(grapple) + "," +
                 str(artificialMonster['Fortitude']) + "," + str(artificialMonster['Reflexes']) + "," + 
                 str(artificialMonster['Will']) + "," + str(artificialMonster['Str']) + "," + 
-                str(artificialMonster['Con']) + "," +
+                str(dex) + "," + str(artificialMonster['Con']) + "," +
                 str(artificialMonster['Int']) + "," + str(artificialMonster['Wis']) + "," +
                 str(artificialMonster['Cha']) + "," + str(self.monsterIn['Enviroments']) + "," + 
                 str(self.monsterIn['Challenge Rating']) + "," + self.monsterIn['Alignment'])
 
-                #print(monsterToClient)
+
+                print(monsterToClient)
 
                 '''
                 monsterToClient = (self.self.monsterIn['Type'] + "," + self.self.monsterIn['Syze'] + "," + str(artificialMonster['Hit dice']) + "," +

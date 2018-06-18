@@ -23,14 +23,17 @@ class Comunicacao:
 		return valor
 
 	def _separaAtributos(self,entrada):
-		#Vou receber um string separado apenas por virgulas, eu quero gravar ele em uma lista de strings
+		#Guardar os valores do 6 ao 8
 		atributos = []
 		atributo = ""
 		entrada += ','
+		count = 0
 		for i in range(len(entrada)):
 			if(entrada[i] != ','):
 				atributo += entrada[i]
 			else:
+				count+=1
+				print(atributo, count)
 				atributos.append(atributo)
 				atributo = ""
 		return atributos
