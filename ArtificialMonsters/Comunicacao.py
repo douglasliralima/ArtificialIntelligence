@@ -32,56 +32,94 @@ class Comunicacao:
 		hitPoints = 0
 		for nome in self.nomes:
 			if(nome == entrada):
-
 				count2 = 0
 				for atributo in self.dados:
+					print(atributo)
 					if(atributo == "Armor Class"):
-						ArmorGeral = artificialMonster['Armor Class'] + '|'
-		                count = 0
-		                valor = ""
-		                ca_normal = 0
-		                ca_touch = 0
-		                ca_surprise = 0
-		                for letra in ArmorGeral:
-		                    if(letra == '|'):
-		                        if(count == 0):
-		                            ca_normal = int(valor)
-		                        elif(count == 1):
-		                            ca_touch = int(valor)
-		                        elif(count == 2):
-		                            ca_surprise = int(valor)
-		                        valor = ""
-		                        count +=1
-		                        continue
-		                    valor += letra
-		                print("Normal:", ca_normal, "Touch:", ca_touch, "Surprise:", ca_surprise)
+						print("Entrou armor class")
+						ArmorGeral = self.dados['Armor Class'][count1] + '|'
+						count3 = 0 
+						aux = ""
+						ca_normal = 0
+						ca_touch = 0
+						ca_surprise = 0
+						for letra in ArmorGeral:
+							if(letra == '|'):
+								if(count3 == 0):
+									ca_normal = int(aux)
+								elif(count3 == 1):
+									ca_touch = int(aux)
+								elif(count3 == 2):
+									ca_surprise = int(aux)
+								aux = ""
+								count3 +=1
+								continue
+							aux += letra
+						#print("ca normal", ca_normal, ca_touch, ca_surprise)
+
+						if(self.monsterIn['Syze'][count1] == "Colossal"):
+		                        armorSizeModifier = -4
+
+		                elif(self.monsterIn['Syze'][count1] == "Gargantuan"):
+		                        armorSizeModifier = -3
+
+		                elif(self.monsterIn['Syze'][count1] == "Huge"):
+		                        armorSizeModifier = -2
+
+		                elif(self.monsterIn['Syze'][count1] == "Large"):
+		                        armorSizeModifier = -1
+
+		                elif(self.monsterIn['Syze'][count1] == "Medium"):
+		                        armorSizeModifier = 0
+
+		                elif(self.monsterIn['Syze'][count1] == "Small"):
+		                        armorSizeModifier = 1
+
+		                elif(self.monsterIn['Syze'][count1] == "Tiny"):
+		                        armorSizeModifier = 2
+
+		                elif(self.monsterIn['Syze'][count1] == "Diminutive"):
+		                        armorSizeModifier = 3
+
+		                elif(self.monsterIn['Syze'][count1] == "Fine"):
+		                        armorSizeModifier = 4
+
+                        mod_dex = ca_touch - armorSizeModifier - 10
+		                dex = (mod_dex * 2) + 10
+
+		                natural_armor = ca_surprise - armorSizeModifier - 10
+
+						#valor += str(ca_normal) + "," + str(ca_touch) + "," + str(ca_surprise) + ","
+						count2+=1
+						continue
 
 
 					elif(atributo == 'Hit dice'):
+						print("Entrou hit dice")
 						dice = self.dados['Dice Type'][count1]
 						dice = int(dice[1:])
 						hitdice = int(self.dados['Hit dice'][count1])
-						print(hitdice)
+						#print(hitdice)
 						i = 1
 						while(i <= hitdice):
 							hitPoints += random.randint(1,dice)
 							i+=1
 						hitPoints += int(self.dados['Life Bonus'][count1])
 						valor += str(hitPoints) + ","
-						print(valor)
+						#print(valor)
 						count2+=1
 						continue
 
 					elif(atributo == 'Dice Type' or atributo == 'Life Bonus'):
+						print("Entrou Dice type ou life bonus")
 						count2+=1
 						continue
-					
-
-					valor += str(self.dados[atributo][count1])
-					if(count2 < len(self.dados.keys()) - 1):
-						valor += ','
-					count2+=1
-				break
+					else:
+						print("Entrou normal")
+						valor += str(self.dados[atributo][count1])
+						if(count2 < len(self.dados.keys()) - 1):
+							valor += ','
+						count2+=1
 			count1+=1
 		return valor
 

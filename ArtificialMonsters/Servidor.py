@@ -5,7 +5,7 @@ from Comunicacao import Comunicacao
 from Projeto import Projeto
 
 serverSocket = "localhost"
-portNumber = 50007
+portNumber = 50008
 tradutor = Comunicacao()
 ia = Projeto()
 
