@@ -1,4 +1,4 @@
-package Cliente;
+package sopaprimordial;
 
 import java.net.*;
 import java.io.*;
@@ -9,15 +9,15 @@ import java.io.*;
  */
 
 public class Comunicacao {
-    private Socket servidor;
+    private Socket cliente;
     private DataOutputStream saida;
     private DataInputStream entrada;
     
-    public Comunicacao(Socket servidor){
+    public Comunicacao(Socket cliente){
         try{
-        this.servidor = servidor;  
-        saida = new DataOutputStream(servidor.getOutputStream());
-        entrada = new DataInputStream(servidor.getInputStream());
+        this.cliente = cliente;  
+        saida = new DataOutputStream(cliente.getOutputStream());
+        entrada = new DataInputStream(cliente.getInputStream());
         }catch(Exception ex){
             ex.printStackTrace();
         }

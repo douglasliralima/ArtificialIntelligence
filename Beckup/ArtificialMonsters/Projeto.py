@@ -31,7 +31,7 @@ class Projeto:
         monsterIn = []
         monsterOut = [] 
 
-        def __init__(self):
+        def __init__():
                 #Primeira coisa que fazemos é carregar o nosso dataset em um objeto da classe DataFrame
                 #Ele basicamente carrega o arquivo e coloca numa variável
                 dados = pd.read_csv('Monstros.csv')
@@ -39,9 +39,14 @@ class Projeto:
 
                 dados = Process.preprocessMonster(dados)
 
+                for i in dados.keys().values:
+                	print(i)
+
+                #print(dados.head())
+
 
                 x_train = dados.drop(['Hit dice', 'Armor Class', 'Fortitude', 'Reflexes', 'Will', 'Str', 'Con', 'Int', 'Wis', 'Cha'], axis = 1)
-                self.y_train = dados.drop(['Type', 'Syze', 'Enviroments', 'Alignment', 'LvL Adjustment', 'Challenge Rating'], axis = 1)
+                y_train = dados.drop(['Type', 'Syze', 'Enviroments', 'Alignment', 'LvL Adjustment', 'Challenge Rating'], axis = 1)
 
                 '''
                 tree1 = DecisionTreeClassifier(random_state = 4)
@@ -51,29 +56,34 @@ class Projeto:
                 print('Acuracia da Arvore de classificação:',accuracyTree)
                 '''
 
-
-                self.tree = DecisionTreeRegressor(random_state = 4)
-                self.tree.fit(x_train, self.y_train)
+                tree = DecisionTreeRegressor(random_state = 4)
+                tree.fit(x_train, y_train)
                 #accuracyTree = tree.score(x_test, y_test)
 
                 #print('Acuracia da Arvore de decisão:',accuracyTree)
 
 
-                self.regr_4 = RandomForestRegressor()
-                self.regr_4.fit(x_train, self.y_train)
+                tree = DecisionTreeRegressor(random_state = 4)
+                tree.fit(x_train, y_train)
+                #accuracyTree = tree.score(x_test, y_test)
+
+                #print('Acuracia da Arvore de decisão:',accuracyTree)
+
+
+                regr_4 = RandomForestRegressor()
+                regr_4.fit(x_train, y_train)
                 #acuracia1 = regr_4.score(x_test, y_test)
                 #print("Acuracia da RandomForestRegressor:", acuracia1)
 
-                self.regr_5 = ExtraTreesRegressor()
-                self.regr_5.fit(x_train, self.y_train)
+                regr_5 = ExtraTreesRegressor()
+                regr_5.fit(x_train, y_train)
                 #acuracia2 = regr_5.score(x_test, y_test)
                 #print("Acuracia das Arvores de regreção:", acuracia2)
 
-                self.regr_3 = ExtraTreeRegressor()
-                self.regr_3.fit(x_train, self.y_train)
+                regr_3 = ExtraTreeRegressor()
+                regr_3.fit(x_train, y_train)
                 #acuracia2 = regr_3.score(x_test, y_test)
                 #print("Acuracia da Arvore de regreção:", acuracia2)
-                print("Inteligencia artificial inicializa")
 
         def setMonsterIn(self, type, size, environment, alignment, lvlAdjustment, challengeRating):
                 self.monsterIn = OrderedDict([
@@ -90,7 +100,6 @@ class Projeto:
 
                 aux = pd.DataFrame(self.monsterIn, columns=self.monsterIn.keys(), index = [0])
                 new_data_naonumeros = aux[['Type', 'Syze', 'Enviroments', 'Alignment']]
-                print(new_data_naonumeros.head())
                 new_data_numeros = aux.drop(['Type', 'Syze', 'Enviroments', 'Alignment'], axis = 1 )
 
                 new_data_naonumeros = Process.traduzUsuario(new_data_naonumeros)
@@ -108,10 +117,10 @@ class Projeto:
 
                 monstro = pd.Series(monstro_usuario).values.reshape(1,-1)
 
-                predict1 = self.tree.predict(monstro)
-                predict2 = self.regr_4.predict(monstro)
-                predict3 = self.regr_3.predict(monstro)
-                predict4 = self.regr_5.predict(monstro)
+                predict1 = tree.predict(monstro)
+                predict2 = regr_4.predict(monstro)
+                predict3 = regr_3.predict(monstro)
+                predict4 = regr_5.predict(monstro)
 
                 numeros = predict1[0 , :]
                 resultado1 = [int(x) for x in numeros]
@@ -135,7 +144,7 @@ class Projeto:
                 #print("\n" * 2, "Resultado 4:", resultado4, sep = "\n")
                 #print(Process.protocoloSaida(y_train, resultado4))
 
-                artificialMonster = Process.protocoloSaida(self.y_train, resultado1)
+                artificialMonster = Process.protocoloSaida(y_train, resultado1)
 
                 #=#=============================#=#========================================================================#=#
                 #=# GERAÇÂO DOS ATRIBUTOS SEM IA #=#========================================================================#=#
@@ -226,14 +235,14 @@ class Projeto:
                 #print("Grapple: ", grapple)
 
 
-                monsterToClient = (self.monsterIn['Type'] + "," + self.monsterIn['Syze'] + "," + str(artificialMonster['Hit dice']) + "," +
-                str(diceType) + "," + str(lifeBonus) + "," + str(baseAttack) + "," + str(grapple) + "," +
+                monsterToClient = (self.self.monsterIn['Type'] + "," + self.self.monsterIn['Syze'] + "," + str(artificialMonster['Hit dice']) + "," +
+                str(diceType) + "," + str(lifeBonus) + "," + "," + str(baseAttack) + "," + str(grapple) + "," +
                 str(artificialMonster['Fortitude']) + "," + str(artificialMonster['Reflexes']) + "," + 
                 str(artificialMonster['Will']) + "," + str(artificialMonster['Str']) + "," + 
                 str(artificialMonster['Con']) + "," +
                 str(artificialMonster['Int']) + "," + str(artificialMonster['Wis']) + "," +
-                str(artificialMonster['Cha']) + "," + str(self.monsterIn['Enviroments']) + "," + 
-                str(self.monsterIn['Challenge Rating']) + "," + self.monsterIn['Alignment'])
+                str(artificialMonster['Cha']) + "," + str(self.self.monsterIn['Enviroments']) + "," + 
+                str(self.self.monsterIn['Challenge Rating']) + "," + self.self.monsterIn['Alignment'])
 
                 #print(monsterToClient)
 
@@ -248,4 +257,4 @@ class Projeto:
                 str(self.self.monsterIn['Challenge Rating']) + "," + self.self.monsterIn['Alignment'])
                 '''
                 
-                return monsterToClient
+                return monster
