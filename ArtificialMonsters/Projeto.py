@@ -251,14 +251,16 @@ class Projeto:
                         continue
                     valor += letra
                 print("Normal:", ca_normal, "Touch:", ca_touch, "Surprise:", ca_surprise)
-                mod_dex = ca_touch - 10 - armorSizeModifier
+                mod_dex = ca_touch - armorSizeModifier - 10
                 dex = (mod_dex * 2) + 10
+                natural_armor = ca_surprise - armorSizeModifier - 10
+                ca_normal = mod_dex + natural_armor + armorSizeModifier + 10
 
 
 
                 initiative = mod_dex
 
-                print("Armadura Geral", ArmorGeral, "Destreza:", dex, 'Iniciativa', initiative)
+                #print("Armadura natural:", natural_armor, "Armor Size Modifier:", armorSizeModifier, "Destreza:", dex, 'Iniciativa', initiative)
                 #---------#--------------------------------------------------------------------------------#
 
                 # HIT POINTS #-----------------------------------------------------------------------------#
@@ -302,12 +304,12 @@ class Projeto:
 
 
 
-                #Tipo, tamanho, hitpoints, initiative, Armor Class, bba, grapple, Fortitude, Reflexos, vontade, força, Destreza, constituicao, inteligencia, sabedoria
-                #carisma, enviroments, challenge rating, alignment
-                print("Armadura Geral", artificialMonster['Armor Class'], "Destreza:", dex, 'Iniciativa', initiative)
+                #Tipo, tamanho, hitpoints, initiative, Armadura natural, Armor Size Modifier, bba, grapple, Fortitude, Reflexos, vontade, 
+                #força, Destreza, constituicao, inteligencia, sabedoria, carisma, enviroments, challenge rating, alignment
+                print("Armadura natural:", natural_armor, "Armor Size Modifier:", armorSizeModifier, "Destreza:", dex, 'Iniciativa', initiative)
 
                 monsterToClient = (self.monsterIn['Type'] + "," + self.monsterIn['Syze'] + "," + str(hitPoints) + "," +
-                str(initiative) + "," + artificialMonster['Armor Class'] + "," +
+                str(initiative) + "," + str(natural_armor)+ "," + str(armorSizeModifier) + "," +
                 str(baseAttack) + "," + str(grapple) + "," +
                 str(artificialMonster['Fortitude']) + "," + str(artificialMonster['Reflexes']) + "," + 
                 str(artificialMonster['Will']) + "," + str(artificialMonster['Str']) + "," + 
@@ -317,7 +319,7 @@ class Projeto:
                 str(self.monsterIn['Challenge Rating']) + "," + self.monsterIn['Alignment'])
 
 
-                print(monsterToClient)
+                #print(monsterToClient)
 
                 '''
                 monsterToClient = (self.self.monsterIn['Type'] + "," + self.self.monsterIn['Syze'] + "," + str(artificialMonster['Hit dice']) + "," +
