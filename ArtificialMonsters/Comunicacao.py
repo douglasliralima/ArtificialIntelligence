@@ -57,31 +57,31 @@ class Comunicacao:
 							aux += letra
 						#print("ca normal", ca_normal, ca_touch, ca_surprise)
 
-						if(self.monsterIn['Syze'][count1] == "Colossal"):
+						if(self.dados['Syze'][count1] == "Colossal"):
 							armorSizeModifier = -4
 
-						elif(self.monsterIn['Syze'][count1] == "Gargantuan"):
+						elif(self.dados['Syze'][count1] == "Gargantuan"):
 							armorSizeModifier = -3
 
-						elif(self.monsterIn['Syze'][count1] == "Huge"):
+						elif(self.dados['Syze'][count1] == "Huge"):
 							armorSizeModifier = -2
 
-						elif(self.monsterIn['Syze'][count1] == "Large"):
+						elif(self.dados['Syze'][count1] == "Large"):
 							armorSizeModifier = -1
 
-						elif(self.monsterIn['Syze'][count1] == "Medium"):
+						elif(self.dados['Syze'][count1] == "Medium"):
 							armorSizeModifier = 0
 
-						elif(self.monsterIn['Syze'][count1] == "Small"):
+						elif(self.dados['Syze'][count1] == "Small"):
 							armorSizeModifier = 1
 
-						elif(self.monsterIn['Syze'][count1] == "Tiny"):
+						elif(self.dados['Syze'][count1] == "Tiny"):
 							armorSizeModifier = 2
 
-						elif(self.monsterIn['Syze'][count1] == "Diminutive"):
+						elif(self.dados['Syze'][count1] == "Diminutive"):
 							armorSizeModifier = 3
 
-						elif(self.monsterIn['Syze'][count1] == "Fine"):
+						elif(self.dados['Syze'][count1] == "Fine"):
 							armorSizeModifier = 4
 
 						mod_dex = ca_touch - armorSizeModifier - 10
@@ -122,6 +122,14 @@ class Comunicacao:
 						count2+=1
 			count1+=1
 		return valor
+		'''
+		Retorna tudo no formato: Nome do Monstro, Tipo, Subtipo, Tamanho, Hit Points,
+		iniciativa, speed, CA surpresa, modificador especial de tamanho (CA outros),
+		Ataque, Ataque Total, Espaço|Alcance, Ataques Especiais, Qualidades Especiais,
+		Fortitude, Reflexes, Will, Str, Dex, Con, Int, Wis, Cha, Skill, Feats, Environment,
+		ND, Treasure, Alignement, Lvl Adjustment, Advancement
+
+		'''
 
 	def _separaAtributos(self,entrada):
 		atributos = []
