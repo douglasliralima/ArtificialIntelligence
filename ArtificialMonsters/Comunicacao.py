@@ -88,8 +88,7 @@ class Comunicacao:
 						dex = (mod_dex * 2) + 10
 
 						natural_armor = ca_surprise - armorSizeModifier - 10
-
-						#valor += str(ca_normal) + "," + str(ca_touch) + "," + str(ca_surprise) + ","
+						valor += str(natural_armor) + "," + str(armorSizeModifier) + ","
 						count2+=1
 						continue
 
@@ -122,12 +121,13 @@ class Comunicacao:
 						count2+=1
 			count1+=1
 		return valor
+		
 		'''
-		Retorna tudo no formato: Nome do Monstro, Tipo, Subtipo, Tamanho, Hit Points,
-		iniciativa, speed, CA surpresa, modificador especial de tamanho (CA outros),
+		Retorna tudo no formato: Indice no dataframe, Nome do Monstro, Tipo, Subtipo, Tamanho, Hit Points,
+		iniciativa, speed, armadura natural, modificador especial de tamanho (CA outros),
 		Ataque, Ataque Total, Espaço|Alcance, Ataques Especiais, Qualidades Especiais,
 		Fortitude, Reflexes, Will, Str, Dex, Con, Int, Wis, Cha, Skill, Feats, Environment,
-		ND, Treasure, Alignement, Lvl Adjustment, Advancement
+		ND(Volta em float), Treasure, Alignement, Lvl Adjustment, Advancement
 
 		'''
 
