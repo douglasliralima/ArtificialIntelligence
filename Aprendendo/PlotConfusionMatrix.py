@@ -16,4 +16,6 @@ array = [[33,2,0,0,0,0,0,0,0,1,3],
 df_cm = pd.DataFrame(array, index = [i for i in "ABCDEFGHIJK"],
                   columns = [i for i in "ABCDEFGHIJK"])
 plt.figure(figsize = (10,7))
-sn.heatmap(df_cm, annot=True, cmap="Reds")
+swarm_plot = sn.heatmap(df_cm, annot=True, cmap="Reds")
+fig = swarm_plot.get_figure()
+fig.savefig("output.png") 
